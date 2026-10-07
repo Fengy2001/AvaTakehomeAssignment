@@ -1,0 +1,19 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  health_id: MyString
+  first_name: MyString
+  middle_name: MyString
+  last_name: MyString
+  dob: 2026-10-04
+  sex: MyString
+  created_at: 2026-10-04 08:03:16
+
+two:
+  health_id: MyString
+  first_name: MyString
+  middle_name: MyString
+  last_name: MyString
+  dob: 2026-10-04
+  sex: MyString
+  created_at: 2026-10-04 08:03:16

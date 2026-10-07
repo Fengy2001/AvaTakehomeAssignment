@@ -1,0 +1,12 @@
+<h1>Upload Patient CSV</h1>
+
+<%= form_with url: upload_patients_path, local: true, multipart: true do |f| %>
+  <div>
+    <%= f.label :csv_file, 'CSV file:' %><br>
+    <%= f.file_field :csv_file %>
+  </div>
+
+  <div>
+    <%= f.submit 'Upload' %>
+  </div>
+<% end %>

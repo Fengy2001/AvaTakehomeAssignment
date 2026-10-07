@@ -1,0 +1,96 @@
+<h1>Patients</h1>
+
+<% summary = flash[:import_summary] %>
+<% if summary %>
+  <h2>Last upload</h2>
+  <ul>
+    <li>Rows in file: <%= summary['rows_in_file'] %></li>
+    <li>Patients imported: <%= summary['imported'] %> (<%= summary['percent'] %>%)</li>
+    <li>Rows skipped: <%= summary['skipped'] %></li>
+    <li>Time taken: <%= summary['seconds'] %> seconds</li>
+  </ul>
+
+  <h3>What happened to the imported patients</h3>
+  <ul>
+    <li>New: <%= summary['created'] %></li>
+    <li>Updated: <%= summary['updated'] %></li>
+    <li>Unchanged: <%= summary['unchanged'] %></li>
+  </ul>
+
+  <h3>Missing information</h3>
+  <ul>
+    <li>No phone: <%= summary['missing_phone'] %></li>
+    <li>No email: <%= summary['missing_email'] %></li>
+    <li>Incomplete address: <%= summary['incomplete_address'] %></li>
+  </ul>
+
+  <h3>Extra columns</h3>
+  <% if flash[:extra_columns].present? %>
+    <p><%= flash[:extra_columns].size %> new column(s) found, stored under Misc:</p>
+    <ul>
+      <% flash[:extra_columns].each do |column| %>
+        <li><%= column %></li>
+      <% end %>
+    </ul>
+  <% else %>
+    <p>None</p>
+  <% end %>
+
+  <h3>Imported by province</h3>
+  <ul>
+    <% flash[:by_province].each do |province, count| %>
+      <li><%= province %>: <%= count %></li>
+    <% end %>
+  </ul>
+<% end %>
+
+<% if flash[:skipped].present? %>
+  <h3>Skipped rows</h3>
+  <ul>
+    <% flash[:skipped].each do |message| %>
+      <li><%= message %></li>
+    <% end %>
+  </ul>
+<% end %>
+
+<table>
+  <thead>
+    <tr>
+      <th>ID</th>
+      <th>Health ID</th>
+      <th>Name</th>
+      <th>DOB</th>
+      <th>Sex</th>
+      <th>Updated On</th>
+      <th>Contacts</th>
+      <th>Address</th>
+      <th>Misc</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @patients.each do |patient| %>
+      <tr>
+        <td><%= patient.id %></td>
+        <td><%= patient.health_id %> (<%= patient.health_identifier_provider %>)</td>
+        <td><%= [patient.first_name, patient.middle_name, patient.last_name].compact.join(' ') %></td>
+        <td><%= patient.dob %></td>
+        <td><%= patient.sex %></td>
+        <td><%= patient.updated_on %></td>
+        <td>
+          <% patient.patient_contacts.each do |contact| %>
+            <strong><%= contact.contact_type %>:</strong> <%= contact.value %><br>
+          <% end %>
+        </td>
+        <td>
+          <% if patient.address %>
+            <%= [patient.address.unit_street, patient.address.city, patient.address.province, patient.address.postal].compact.join(', ') %>
+          <% else %>
+            N/A
+          <% end %>
+        </td>
+        <td><%= patient.uncategorized&.misc %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
